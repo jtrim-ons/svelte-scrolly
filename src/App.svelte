@@ -1,6 +1,6 @@
 <script>
 	import { setContext, onMount } from "svelte";
-	import { getData, setColors } from "./utils.js";
+	import { runAction, getData, setColors } from "./utils.js";
 	import { themes, regions, colors, datakeys } from './config.js';
 	import { ScatterChart } from "@onsvisual/svelte-charts";
 	import ONSHeader from "./ONSHeader.svelte";
@@ -23,11 +23,8 @@
 	// Config
 	const threshold = 0.9;
 	// State
-	let index = [];
-	let indexPrev = [];
-	onMount(() => {
-		indexPrev = [...index];
-	});
+	let chartSectionIndex = 0;
+	let mapSectionIndex = 0;
 
 	// CHART CODE
 	// Config
@@ -76,12 +73,7 @@
 	];
 	
 	// Reactive code to trigger CHART actions
-	$: if (index[0] != indexPrev[0]) {
-		if (chartActions[+index[0]]) {
-			chartActions[+index[0]]();
-		}
-		indexPrev[0] = index[0];
-	}
+	$: {runAction(chartActions[+chartSectionIndex]);}
 	
 	// MAP CODE
 	// Config
@@ -102,11 +94,8 @@
 	];
 	
 	// Reactive code to trigger MAP actions
-	$: if (map && index[1] != indexPrev[1]) {
-		if (mapActions[+index[1]]) {
-			mapActions[+index[1]]();
-		}
-		indexPrev[1] = index[1];
+	$: if (map) {
+		runAction(mapActions[+mapSectionIndex]);
 	}
 
 </script>
@@ -171,7 +160,7 @@
 	</p>
 </Section>
 
-<Scroller {threshold} bind:index={index[0]} splitscreen={true}>
+<Scroller {threshold} bind:index={chartSectionIndex} splitscreen={true}>
 	<div slot="background">
 		<figure>
 			<div class="col-wide height-full middle">
@@ -267,7 +256,7 @@
 	</p>
 </Section>
 
-<Scroller {threshold} bind:index={index[1]}>
+<Scroller {threshold} bind:index={mapSectionIndex}>
 	<div slot="background">
 		<figure>
 			<div class="col-full height-full">

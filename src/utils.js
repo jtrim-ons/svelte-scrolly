@@ -1,5 +1,11 @@
 import { csvParse, autoType } from 'd3-dsv';
 
+export function runAction(action) {
+  if (action) {
+    action();
+  }
+}
+
 export function setColors(themes, theme) {
   for (let color in themes[theme]) {
     document.documentElement.style.setProperty('--' + color, themes[theme][color]);

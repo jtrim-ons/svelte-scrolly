@@ -121,6 +121,22 @@
     }
   }
 
+  	function getSectionIndex(fg) {
+		for (let index = 0; index < sections.length; index += 1) {
+			const section = sections[index];
+			const { top } = section.getBoundingClientRect();
+
+			const next = sections[index + 1];
+			const bottom = next ? next.getBoundingClientRect().top : fg.bottom;
+
+			offset = (threshold_px - top) / (bottom - top);
+			if (bottom >= threshold_px) {
+				return index;
+			}
+		}
+		return sections.length;
+	}
+
 	function update() {
 		if (!foreground) return;
 
@@ -165,16 +181,7 @@
       }
 		}
 
-		for (index = 0; index < sections.length; index += 1) {
-			const section = sections[index];
-			const { top } = section.getBoundingClientRect();
-
-			const next = sections[index + 1];
-			const bottom = next ? next.getBoundingClientRect().top : fg.bottom;
-
-			offset = (threshold_px - top) / (bottom - top);
-			if (bottom >= threshold_px) break;
-		}
+		index = getSectionIndex(fg);
 	}
 </script>
 
