@@ -21,7 +21,7 @@
 
 	// SCROLLYTELLING CONFIG
 	// Config
-	const threshold = 0.65;
+	const threshold = 0.9;
 	// State
 	let index = [];
 	let indexPrev = [];
